@@ -6,5 +6,14 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'object-autocomplete';
+  constructor() { }
+  // getCurrentkeys(v: string) {
+  //   let arr = [];
+  //
+  //   return new Promise((resolve, reject) => {
+  //     if (!this.checkSyntex(v)) return resolve(arr);
+  //     arr = Object.keys(this.jsonObject);
+  //     return resolve(arr);
+  //   })
+  // }
 }
