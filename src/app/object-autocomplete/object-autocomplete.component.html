@@ -1,8 +1,6 @@
 
 <h1>Heading</h1>
-<input style="width: 50%; height: 40px;" (keyup)="onKey($event)" type="text" name="" value="">
+<input style="width: 50%; height: 40px;" (keyup)='keyUp.next($event.target.value)' type="text" name="" value="">
 
-<!-- <ul>
-  <li *ngFor="let o of suggestionArray">{{o}}</li>
-</ul> -->
+<!-- <input style="width: 50%; height: 40px;" (keyup)="onKey($event.target.value)" type="text" name="" value=""> -->
 <app-drop-down [dropDownObject]="suggestionArray" (dropDownEmitter)="DropDownComponentEventListener($event)"></app-drop-down>
