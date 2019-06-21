@@ -1,4 +1,5 @@
 <p>Drop Down</p>
 <ul>
-  <li *ngFor="let o of dropdownList">{{o}}</li>
+  <li *ngFor="let o of dropdownList | filter : sText">{{o}}</li>
+  <!-- <li *ngFor="let o of dropdownList">{{o}}</li> -->
 </ul>

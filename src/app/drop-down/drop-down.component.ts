@@ -7,17 +7,19 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 export class DropDownComponent implements OnInit {
   public dropdownList:object = [];
+  public sText:string = '';
+  @Input('searchText') set searchText(v: string) {
+    console.log("got", v)
+    this.sText = v;
+  }
 
   @Input('dropDownObject') set dropDownObject(v: object) {
-    console.log('Input')
     this.dropdownList = v;
   }
   @Output() dropDownEmitter = new EventEmitter<any>();
 
   constructor() { }
 
-  ngOnInit() {
-    console.log('ngOnInit')
-  }
+  ngOnInit() {}
 
 }
