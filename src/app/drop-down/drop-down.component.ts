@@ -22,4 +22,8 @@ export class DropDownComponent implements OnInit {
 
   ngOnInit() {}
 
+  emit(value:any) {
+    this.dropDownEmitter.emit(value);
+  }
+
 }
