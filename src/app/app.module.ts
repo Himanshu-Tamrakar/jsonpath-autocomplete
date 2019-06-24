@@ -6,20 +6,23 @@ import { AppComponent } from './app.component';
 import { DropDownComponent } from './drop-down/drop-down.component';
 import { ObjectAutocompleteComponent } from './object-autocomplete/object-autocomplete.component';
 import { FilterPipe } from './core/pipes/filter.pipe';
+import { FinddotDirective } from './core/direcctives/finddot.directive';
+import { SubscribalService } from './core/services/subscribal.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     DropDownComponent,
     ObjectAutocompleteComponent,
-    FilterPipe
+    FilterPipe,
+    FinddotDirective
   ],
   imports: [
     BrowserModule,
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [SubscribalService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
