@@ -1,5 +1,10 @@
 
 <h1>Heading</h1>
-<input style="width: 50%; height: 40px;" (keyup)='keyUp.next($event.target.value)' type="text" name="" value="">
+<input #inputBox style="width: 50%; height: 40px;" (keyup)='keyUp.next($event.target.value)' type="text" name="" value="">
 
-<app-drop-down [searchText]="searchText" [dropDownObject]="suggestionArray" (dropDownEmitter)="DropDownComponentEventListener($event)"></app-drop-down>
+<app-drop-down [searchText]="searchText" [dropDownObject]="suggestionArray" (dropDownEmitter)="DropDownComponentEventListener($event)">
+
+</app-drop-down>
+
+
+<!-- <input type="text" name="" value="" appFinddot> -->
