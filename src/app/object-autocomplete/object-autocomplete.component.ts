@@ -20,7 +20,7 @@ export class ObjectAutocompleteComponent {
 
   private jsonObject:any
 
-  constructor(private subscribalService: SubscribalService, private CommanService:CommanService) {
+  constructor(public subscribalService: SubscribalService, private CommanService:CommanService) {
 
     this.getData();
 
@@ -120,12 +120,12 @@ export class ObjectAutocompleteComponent {
     this.subscribalService.publishValue('KEY_UP', this.iB.nativeElement.value);
   }
 
-  // public DropDownComponentEventListener(v: string): void {
-  //   let temp = this.iB.nativeElement.value.split('.');
-  //
-  //   this.iB.nativeElement.value = temp.join(".");
-  //   this.keyUp.next(this.iB.nativeElement.value);
-  // }
+  public DropDownComponentEventListener(v: string): void {
+    // let temp = this.iB.nativeElement.value.split('.');
+    //
+    // this.iB.nativeElement.value = temp.join(".");
+    // this.keyUp.next(this.iB.nativeElement.value);
+  }
 
 
 
