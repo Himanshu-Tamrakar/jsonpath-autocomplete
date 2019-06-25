@@ -23,7 +23,6 @@ export class SubscribalService {
   }
 
   public publishValue(keyType, value) {
-    debugger
     switch (keyType) {
       case 'KEY_TO_APPEND': {
         this.keyToAppend.next(value);
