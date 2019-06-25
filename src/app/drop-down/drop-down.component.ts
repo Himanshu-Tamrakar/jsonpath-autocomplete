@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { SubscribalService } from '../core/services/subscribal.service';
 
 @Component({
   selector: 'app-drop-down',
@@ -18,7 +19,7 @@ export class DropDownComponent implements OnInit {
   }
   @Output() dropDownEmitter = new EventEmitter<any>();
 
-  constructor() { }
+  constructor(private subscribalService:SubscribalService) { }
 
   ngOnInit() {}
 

@@ -1,5 +1,5 @@
 <p>Drop Down</p>
 <ul>
-  <li (click)="emit(o)" *ngFor="let o of dropdownList | filter : sText">{{o}}</li>
+  <li (click)="subscribalService.publishValue('KEY_TO_APPEND', o)" *ngFor="let o of dropdownList | filter : sText">{{o}}</li>
   <!-- <li *ngFor="let o of dropdownList">{{o}}</li> -->
 </ul>
