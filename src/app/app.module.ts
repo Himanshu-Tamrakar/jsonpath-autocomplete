@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { DropDownComponent } from './drop-down/drop-down.component';
@@ -8,6 +9,7 @@ import { ObjectAutocompleteComponent } from './object-autocomplete/object-autoco
 import { FilterPipe } from './core/pipes/filter.pipe';
 import { FinddotDirective } from './core/direcctives/finddot.directive';
 import { SubscribalService } from './core/services/subscribal.service';
+import { CommanService } from './core/services/comman.service';
 
 @NgModule({
   declarations: [
@@ -20,9 +22,10 @@ import { SubscribalService } from './core/services/subscribal.service';
   imports: [
     BrowserModule,
     FormsModule,
+    HttpClientModule,
     ReactiveFormsModule
   ],
-  providers: [SubscribalService],
+  providers: [SubscribalService, CommanService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
