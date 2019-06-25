@@ -19,7 +19,7 @@ export class DropDownComponent implements OnInit {
   }
   @Output() dropDownEmitter = new EventEmitter<any>();
 
-  constructor(private subscribalService:SubscribalService) { }
+  constructor(public subscribalService:SubscribalService) { }
 
   ngOnInit() {}
 
