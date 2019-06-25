@@ -59,20 +59,20 @@ export class ObjectAutocompleteComponent {
   }
 
   constructor(private subscribalService:SubscribalService) {
-
-    this.subScripeToAppendKey('KEY_TO_APPEND');
-
-    const subscription = this.keyUp.pipe(
+    const sub = this.subscribalService.returnSubjectKey('KEY_UP').pipe(
       debounceTime(100),
       map(event => this.onKey(event))
-      // distinctUntilChanged(),
-      // flatMap(search => of(search).pipe(delay(500)))
+    ).subscribe();
+
+
+    this.subscribalService.returnSubjectKey('KEY_TO_APPEND').pipe(
+      debounceTime(100),
+      map(event => this.appendKey(event))
     ).subscribe();
   }
 
-  onKey(eventValue: any): void {
+  public onKey(eventValue: any): void {
     if (eventValue == '') { this.suggestionArray = []; this.searchText = JSON.parse(JSON.stringify('')); return; }
-
     try {
       if (typeof (jp.query(this.jsonObject, eventValue)[0]) == 'object') {
         console.log('object', jp.query(this.jsonObject, eventValue))
@@ -99,17 +99,25 @@ export class ObjectAutocompleteComponent {
     }
   }
 
-  public DropDownComponentEventListener(v: string): void {
+  public appendKey(keyName:string) {
     let temp = this.iB.nativeElement.value.split('.');
 
+    // TO CHECK WHEATHER LAST KEY IS NOT EMPTY
+    if(temp[temp.length-1] == '') temp[temp.length-1] = keyName;
+    else temp.push(keyName);
+
     this.iB.nativeElement.value = temp.join(".");
-    this.keyUp.next(this.iB.nativeElement.value);
+
+    this.subscribalService.publishValue('KEY_UP', this.iB.nativeElement.value);
   }
 
-  public subScripeToAppendKey(key:string) {
-    this.subscribalService.returnSubjectKey(key).subscribe((value) => {
+  // public DropDownComponentEventListener(v: string): void {
+  //   let temp = this.iB.nativeElement.value.split('.');
+  //
+  //   this.iB.nativeElement.value = temp.join(".");
+  //   this.keyUp.next(this.iB.nativeElement.value);
+  // }
 
-    })
-  }
+
 
 }
