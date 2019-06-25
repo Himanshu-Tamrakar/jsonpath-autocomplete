@@ -3,6 +3,7 @@ import jp from 'jsonpath/jsonpath.min';
 import { Observable, of, Subject } from 'rxjs';
 import { debounceTime, delay, distinctUntilChanged, flatMap, map, tap } from 'rxjs/operators';
 import { SubscribalService } from '../core/services/subscribal.service';
+import { CommanService } from '../core/services/comman.service';
 
 @Component({
   selector: 'app-object-autocomplete',
@@ -17,48 +18,12 @@ export class ObjectAutocompleteComponent {
   @ViewChild('inputBox') iB: ElementRef;
 
 
-  private jsonObject = {
-    "product": "Live JSON generator",
-    "version": 3.1,
-    "releaseDate": "2014-06-25T00:00:00.000Z",
-    "demo": true,
-    "hiyo": {
-      "0": {
-        "himanshu": "tamrakar"
-        },
-      "1": 'one'
-    },
-    "person": {
-      "id": 12345,
-      "name": "John Doe",
-      "phones": {
-        "home": "800-123-4567",
-        "mobile": "877-123-1234"
-      },
-      "email": [
-        "jd@example.com",
-        "jd@example.org"
-      ],
-      "dateOfBirth": "1980-01-02T00:00:00.000Z",
-      "registered": true,
-      "emergencyContacts": [
-        {
-          "name": "Jane Doe",
-          "phone": "888-555-1212",
-          "relationship": "spouse"
-        },
-        {
-          "name": "Justin Doe",
-          "phone": "877-123-1212",
-          "relationship": "parent"
-        }
-      ]
-    },
-    "test": { "0": "asd", "1": { "hilo": "World" }, "2": 'asda' },
-    "test1": ["asd", "sasd", "asda"]
-  }
+  private jsonObject:any
 
-  constructor(private subscribalService:SubscribalService) {
+  constructor(private subscribalService: SubscribalService, private CommanService:CommanService) {
+
+    this.getData();
+
     const sub = this.subscribalService.returnSubjectKey('KEY_UP').pipe(
       debounceTime(100),
       map(event => this.onKey(event))
@@ -71,13 +36,56 @@ export class ObjectAutocompleteComponent {
     ).subscribe();
   }
 
+  private getData() {
+    this.CommanService.getAutoCompleteObject().subscribe((r) => {
+      this.jsonObject = r['parsorObject'];
+    }, (err) => {
+      this.jsonObject = {};
+    })
+  }
+
   public onKey(eventValue: any): void {
     if (eventValue == '') { this.suggestionArray = []; this.searchText = JSON.parse(JSON.stringify('')); return; }
+    let sT = '';
+    let temp = eventValue.split('.');
+    if (temp.length > 1) {
+
+      try {
+        if (typeof (jp.query(this.jsonObject, eventValue)[0]) == 'string' || typeof (jp.query(this.jsonObject, eventValue)[0]) == 'number' || typeof (jp.query(this.jsonObject, eventValue)[0]) == 'boolean') {
+          this.searchText = JSON.parse(JSON.stringify(sT));
+          this.suggestionArray = [];
+          return;
+        } else if (typeof (jp.query(this.jsonObject, eventValue)[0]) == 'object') {
+          this.searchText = JSON.parse(JSON.stringify(sT));
+          this.suggestionArray = Object.keys(jp.query(this.jsonObject, eventValue)[0]);
+        } else {
+          sT = temp[temp.length - 1];
+          temp.splice(-1, 1);
+          eventValue = temp.join('.')
+        }
+      } catch (err) {
+        sT = temp[temp.length - 1];
+        temp.splice(-1, 1);
+        eventValue = temp.join('.')
+      }
+
+
+    }
+
+    // console.log('sdsds',temp.join('.'));
     try {
       if (typeof (jp.query(this.jsonObject, eventValue)[0]) == 'object') {
-        console.log('object', jp.query(this.jsonObject, eventValue))
-        this.searchText = JSON.parse(JSON.stringify(''));
+        // this.searchText = JSON.parse(JSON.stringify(''));
+        this.searchText = JSON.parse(JSON.stringify(sT));
+
         this.suggestionArray = Object.keys(jp.query(this.jsonObject, eventValue)[0]);
+
+        if (Array.isArray(jp.query(this.jsonObject, eventValue)[0])) {
+          let tempArr = <any[]>this.suggestionArray;
+          tempArr.unshift('*');
+          this.suggestionArray = tempArr;
+        }
+
       } else if (typeof (jp.query(this.jsonObject, eventValue)[0]) == 'string' || typeof (jp.query(this.jsonObject, eventValue)[0]) == 'number' || typeof (jp.query(this.jsonObject, eventValue)[0]) == 'boolean') {
         console.log('other')
         this.searchText = JSON.parse(JSON.stringify(''));
@@ -86,7 +94,8 @@ export class ObjectAutocompleteComponent {
         console.log('undefined')
         // this.suggestionArray = [];
         const valArr = eventValue.split('.');
-        this.searchText = JSON.parse(JSON.stringify(valArr[valArr.length - 1]));
+        // this.searchText = JSON.parse(JSON.stringify(valArr[valArr.length - 1]));
+        this.searchText = JSON.parse(JSON.stringify(sT));
       } else {
         console.log('else')
         this.searchText = JSON.parse(JSON.stringify(''));
@@ -99,11 +108,11 @@ export class ObjectAutocompleteComponent {
     }
   }
 
-  public appendKey(keyName:string) {
+  public appendKey(keyName: string) {
     let temp = this.iB.nativeElement.value.split('.');
 
     // TO CHECK WHEATHER LAST KEY IS NOT EMPTY
-    if(temp[temp.length-1] == '') temp[temp.length-1] = keyName;
+    if (temp[temp.length - 1] == '') temp[temp.length - 1] = keyName;
     else temp.push(keyName);
 
     this.iB.nativeElement.value = temp.join(".");
