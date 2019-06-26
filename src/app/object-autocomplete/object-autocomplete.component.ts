@@ -18,9 +18,9 @@ export class ObjectAutocompleteComponent {
   @ViewChild('inputBox') iB: ElementRef;
 
 
-  private jsonObject:any
+  private jsonObject: any
 
-  constructor(public subscribalService: SubscribalService, private CommanService:CommanService) {
+  constructor(public subscribalService: SubscribalService, private CommanService: CommanService) {
 
     this.getData();
 
@@ -109,11 +109,23 @@ export class ObjectAutocompleteComponent {
   }
 
   public appendKey(keyName: string) {
-    let temp = this.iB.nativeElement.value.split('.');
-
-    // TO CHECK WHEATHER LAST KEY IS NOT EMPTY
-    if (temp[temp.length - 1] == '') temp[temp.length - 1] = keyName;
-    else temp.push(keyName);
+    let temp = []
+    try {
+      if (typeof (jp.query(this.jsonObject, this.iB.nativeElement.value)[0]) == 'undefined') {
+        temp = this.iB.nativeElement.value.split('.');
+        temp[temp.length - 1] = keyName;
+      } else {
+        temp = this.iB.nativeElement.value.split('.');
+        // TO CHECK WHEATHER LAST KEY IS NOT EMPTY
+        if (temp[temp.length - 1] == '') temp[temp.length - 1] = keyName;
+        else temp.push(keyName);
+      }
+    } catch (err) {
+      temp = this.iB.nativeElement.value.split('.');
+      // TO CHECK WHEATHER LAST KEY IS NOT EMPTY
+      if (temp[temp.length - 1] == '') temp[temp.length - 1] = keyName;
+      else temp.push(keyName);
+    }
 
     this.iB.nativeElement.value = temp.join(".");
 
