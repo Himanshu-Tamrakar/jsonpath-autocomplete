@@ -18,7 +18,7 @@ export class ObjectAutocompleteComponent {
   @ViewChild('inputBox') iB: ElementRef;
 
 
-  private jsonObject: any
+  public jsonObject: any
 
   constructor(public subscribalService: SubscribalService, private CommanService: CommanService) {
 
