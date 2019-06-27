@@ -7,11 +7,14 @@ import { SubscribalService } from '../../core/services/subscribal.service';
 export class InputFeatureDirective {
 
   constructor(private el: ElementRef, private render: Renderer, private subscribalService: SubscribalService) { }
+  @HostListener('keydown', ['$event'])
+  onKeyDown(event:any) {
+    this.arrawClicked(event)
+  }
 
   @HostListener('keyup', ['$event'])
   onInputChange(event: KeyboardEvent) {
     this.subscribalService.publishValue('KEY_UP', event.target['value']);
-    this.arrawClicked(event)
   }
 
   private arrawClicked(event: KeyboardEvent) {
@@ -20,7 +23,8 @@ export class InputFeatureDirective {
         break;
       }
       case 38: {
-        console.log(event.key);
+        //Preventing cursor to move at start point: On arrow up key pressed
+        event.preventDefault();
         break;
       }
       case 39: {

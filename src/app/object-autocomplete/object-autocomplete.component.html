@@ -2,9 +2,9 @@
 <h1>JSONPath AutoComplete</h1>
 
 <div class="">
-    <input #inputBox style="width: 100%; height: 40px;" type="text" appInputFeature>
+    <input #inputBox style="width: 100%; height: 40px;" type="text" appInputFeature autofocus>
 </div>
-
+<!--  -->
 <app-drop-down [searchText]="searchText" [dropDownObject]="suggestionArray" (dropDownEmitter)="DropDownComponentEventListener($event)">
 </app-drop-down>
 
