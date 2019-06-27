@@ -12,6 +12,7 @@ import { SubscribalService } from './core/services/subscribal.service';
 import { CommanService } from './core/services/comman.service';
 import { DropdownFeatureDirective } from './core/direcctives/dropdown-feature.directive';
 import { InputFeatureDirective } from './core/direcctives/input-feature.directive';
+import { HighlightDirective } from './core/direcctives/highlight.directive';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { InputFeatureDirective } from './core/direcctives/input-feature.directiv
     FilterPipe,
     FinddotDirective,
     DropdownFeatureDirective,
-    InputFeatureDirective
+    InputFeatureDirective,
+    HighlightDirective
   ],
   imports: [
     BrowserModule,

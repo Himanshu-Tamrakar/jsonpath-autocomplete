@@ -45,7 +45,7 @@ export class ObjectAutocompleteComponent {
   }
 
   public onKey(eventValue: any): void {
-    if (eventValue == '') { this.suggestionArray = []; this.searchText = JSON.parse(JSON.stringify('')); return; }
+    if (eventValue == '' || eventValue == undefined) { this.suggestionArray = []; this.searchText = JSON.parse(JSON.stringify('')); return; }
     let sT = '';
     let temp = eventValue.split('.');
     if (temp.length > 1) {
