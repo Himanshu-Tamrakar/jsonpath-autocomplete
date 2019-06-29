@@ -54,6 +54,8 @@ export class ObjectAutocompleteComponent {
         if (typeof (jp.query(this.jsonObject, eventValue)[0]) == 'string' || typeof (jp.query(this.jsonObject, eventValue)[0]) == 'number' || typeof (jp.query(this.jsonObject, eventValue)[0]) == 'boolean') {
           this.searchText = JSON.parse(JSON.stringify(sT));
           this.suggestionArray = [];
+          debugger
+          this.subscribalService.setSuggestedArray(this.suggestionArray);
           return;
         } else if (typeof (jp.query(this.jsonObject, eventValue)[0]) == 'object') {
           this.searchText = JSON.parse(JSON.stringify(sT));
@@ -75,9 +77,7 @@ export class ObjectAutocompleteComponent {
     // console.log('sdsds',temp.join('.'));
     try {
       if (typeof (jp.query(this.jsonObject, eventValue)[0]) == 'object') {
-        // this.searchText = JSON.parse(JSON.stringify(''));
         this.searchText = JSON.parse(JSON.stringify(sT));
-
         this.suggestionArray = Object.keys(jp.query(this.jsonObject, eventValue)[0]);
 
         if (Array.isArray(jp.query(this.jsonObject, eventValue)[0])) {
@@ -85,27 +85,20 @@ export class ObjectAutocompleteComponent {
           tempArr.unshift('*');
           this.suggestionArray = tempArr;
         }
-
       } else if (typeof (jp.query(this.jsonObject, eventValue)[0]) == 'string' || typeof (jp.query(this.jsonObject, eventValue)[0]) == 'number' || typeof (jp.query(this.jsonObject, eventValue)[0]) == 'boolean') {
-        console.log('other')
         this.searchText = JSON.parse(JSON.stringify(''));
         this.suggestionArray = [];
       } else if (typeof (jp.query(this.jsonObject, eventValue)[0]) == 'undefined') {
-        console.log('undefined')
-        // this.suggestionArray = [];
         const valArr = eventValue.split('.');
-        // this.searchText = JSON.parse(JSON.stringify(valArr[valArr.length - 1]));
         this.searchText = JSON.parse(JSON.stringify(sT));
       } else {
-        console.log('else')
         this.searchText = JSON.parse(JSON.stringify(''));
-        // this.suggestionArray = [];
       }
     } catch (err) {
-      console.log('catch')
       this.searchText = JSON.parse(JSON.stringify(''));
-      // this.suggestionArray = [];
     }
+    debugger
+    this.subscribalService.setSuggestedArray(this.suggestionArray);
   }
 
   public appendKey(keyName: string) {
