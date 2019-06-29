@@ -9,6 +9,7 @@ import { debounceTime, delay, distinctUntilChanged, flatMap, map, tap } from 'rx
 export class SubscribalService {
   private sI = 0;
   private suggestedArrayOption = [];
+  private fiteredSuggestedArrayOption=[];
   private keyToAppend = new Subject<any>();
   private keyUp = new Subject<string>();
   private selectedItemIndex = new Subject<number>();
@@ -69,10 +70,17 @@ export class SubscribalService {
 
   public setSuggestedArray(obj:any) {
     this.suggestedArrayOption = obj;
+    this.setFiteredSuggestedArrayOption(obj);
     this.resetIndex();
     this.publishValue('SUGGESTED_ARRAY', this.suggestedArrayOption);
   }
 
+  public setFiteredSuggestedArrayOption(obj) {
+    if(Array.isArray(obj)) this.fiteredSuggestedArrayOption = obj;
+  }
 
+  public handleClick() {
+    this.publishValue('KEY_TO_APPEND', this.fiteredSuggestedArrayOption[this.sI]);
+  }
 
 }
