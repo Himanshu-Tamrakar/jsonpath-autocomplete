@@ -15,7 +15,10 @@ export class InputFeatureDirective {
   @HostListener('keyup', ['$event'])
   onInputChange(event: KeyboardEvent) {
     if(event.keyCode == 37 || event.keyCode ==38 || event.keyCode == 39 || event.keyCode ==40) console.log("didn't call");
-    else this.subscribalService.publishValue('KEY_UP', event.target['value']);
+    else {
+      if(event.keyCode == 13) this.subscribalService.handleClick();
+      else this.subscribalService.publishValue('KEY_UP', event.target['value']);
+    }
   }
 
   private arrawClicked(event: KeyboardEvent) {
