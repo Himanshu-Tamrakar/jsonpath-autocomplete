@@ -7,8 +7,13 @@ import { debounceTime, delay, distinctUntilChanged, flatMap, map, tap } from 'rx
   providedIn: 'root'
 })
 export class SubscribalService {
+  private sI = 0;
+  private suggestedArrayOption = [];
   private keyToAppend = new Subject<any>();
-  public keyUp = new Subject<string>();
+  private keyUp = new Subject<string>();
+  private selectedItemIndex = new Subject<number>();
+  private suggestedArray = new Subject<any>();
+
   constructor() { }
 
   public returnSubjectKey(keyType) {
@@ -18,6 +23,12 @@ export class SubscribalService {
       }
       case 'KEY_UP': {
         return this.keyUp;
+      }
+      case 'ITEM_INDEX': {
+        return this.selectedItemIndex;
+      }
+      case 'SUGGESTED_ARRAY': {
+        return this.suggestedArray;
       }
     }
   }
@@ -32,7 +43,36 @@ export class SubscribalService {
         this.keyUp.next(value);
         break;
       }
+      case 'ITEM_INDEX': {
+        this.selectedItemIndex.next(value)
+      }
+      case 'SUGGESTED_ARRAY': {
+        this.suggestedArray.next(value);
+      }
     }
   }
+
+  public selectedIndexValue(operator) {
+    if(operator == '+') this.sI++;
+    else this.sI--;
+
+    if(this.sI < 0) this.sI=0;
+    if(this.suggestedArrayOption.length-1 < this.sI) this.sI = this.suggestedArrayOption.length-1;
+
+    this.publishValue('ITEM_INDEX', this.sI);
+  }
+
+  public resetIndex() {
+    this.sI =0;
+    this.publishValue('ITEM_INDEX', this.sI);
+  }
+
+  public setSuggestedArray(obj:any) {
+    this.suggestedArrayOption = obj;
+    this.resetIndex();
+    this.publishValue('SUGGESTED_ARRAY', this.suggestedArrayOption);
+  }
+
+
 
 }
