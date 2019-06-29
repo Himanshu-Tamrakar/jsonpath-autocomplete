@@ -25,13 +25,13 @@ export class ObjectAutocompleteComponent {
     this.getData();
 
     const sub = this.subscribalService.returnSubjectKey('KEY_UP').pipe(
-      debounceTime(100),
+      debounceTime(10),
       map(event => this.onKey(event))
     ).subscribe();
 
 
     this.subscribalService.returnSubjectKey('KEY_TO_APPEND').pipe(
-      debounceTime(100),
+      debounceTime(10),
       map(event => this.appendKey(event))
     ).subscribe();
   }
