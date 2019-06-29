@@ -54,7 +54,6 @@ export class ObjectAutocompleteComponent {
         if (typeof (jp.query(this.jsonObject, eventValue)[0]) == 'string' || typeof (jp.query(this.jsonObject, eventValue)[0]) == 'number' || typeof (jp.query(this.jsonObject, eventValue)[0]) == 'boolean') {
           this.searchText = JSON.parse(JSON.stringify(sT));
           this.suggestionArray = [];
-          debugger
           this.subscribalService.setSuggestedArray(this.suggestionArray);
           return;
         } else if (typeof (jp.query(this.jsonObject, eventValue)[0]) == 'object') {
@@ -97,7 +96,6 @@ export class ObjectAutocompleteComponent {
     } catch (err) {
       this.searchText = JSON.parse(JSON.stringify(''));
     }
-    debugger
     this.subscribalService.setSuggestedArray(this.suggestionArray);
   }
 
