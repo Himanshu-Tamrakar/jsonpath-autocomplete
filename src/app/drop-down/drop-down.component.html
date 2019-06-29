@@ -1,6 +1,6 @@
 
 <p>Drop Down</p>
 <ul>
-  <li style="padding: 6px; border: 1px solid green;margin:1px; cursor:pointer;" (click)="subscribalService.publishValue('KEY_TO_APPEND', o)" *ngFor="let o of dropdownList | filter : sText">{{o}}</li>
-  <!-- <li style="padding: 6px; border: 1px solid green;margin:1px; cursor:pointer;" *ngFor="let o of dropdownList | filter : sText">{{o}}</li> -->
+  <li [ngClass]="{'selected': i == selectedIndex}" style="padding: 6px; border: 1px solid green;margin:1px; cursor:pointer;" *ngFor="let o of dropdownList | filter : sText; index as i">{{o}}</li>
+  <!-- <li (click)="onItemClick(o)" style="padding: 6px; border: 1px solid green;margin:1px; cursor:pointer;" *ngFor="let o of dropdownList | filter : sText">{{o}}</li> -->
 </ul>
