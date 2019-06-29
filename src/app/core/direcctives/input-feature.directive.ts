@@ -14,7 +14,8 @@ export class InputFeatureDirective {
 
   @HostListener('keyup', ['$event'])
   onInputChange(event: KeyboardEvent) {
-    this.subscribalService.publishValue('KEY_UP', event.target['value']);
+    if(event.keyCode == 37 || event.keyCode ==38 || event.keyCode == 39 || event.keyCode ==40) console.log("didn't call");
+    else this.subscribalService.publishValue('KEY_UP', event.target['value']);
   }
 
   private arrawClicked(event: KeyboardEvent) {
@@ -25,13 +26,14 @@ export class InputFeatureDirective {
       case 38: {
         //Preventing cursor to move at start point: On arrow up key pressed
         event.preventDefault();
+        this.subscribalService.selectedIndexValue('-')
         break;
       }
       case 39: {
         break;
       }
       case 40: {
-        console.log(event.key);
+        this.subscribalService.selectedIndexValue('+')
         break;
       }
     }
