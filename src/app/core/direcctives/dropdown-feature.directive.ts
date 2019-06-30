@@ -5,11 +5,20 @@ import { SubscribalService } from '../../core/services/subscribal.service';
 })
 export class DropdownFeatureDirective {
 
-  constructor(private el: ElementRef, private render: Renderer, private subscribalService:SubscribalService) { }
+  constructor(private el: ElementRef, private render: Renderer, private subscribalService: SubscribalService) { }
 
-  @HostListener('keyup.enter', ['$event'])
+  @HostListener('document: keyup', ['$event'])
   onInputChange(event: KeyboardEvent) {
-    alert()
+
+
+
+    if (event.keyCode == 38) {
+      setTimeout(()=>{this.el.nativeElement.scrollTop = this.el.nativeElement.scrollTop - 25;}, 200)
+
+    } else if (event.keyCode == 40) {
+      setTimeout(()=>{this.el.nativeElement.scrollTop = this.el.nativeElement.scrollTop + 25;}, 200)
+    }
+
   }
 
   // @HostListener('document:click', ['$event'])
