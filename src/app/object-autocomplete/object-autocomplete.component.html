@@ -1,9 +1,13 @@
 
-<h1>Heading</h1>
-<input #inputBox style="width: 50%; height: 40px;" (keyup)="subscribalService.publishValue('KEY_UP', $event.target.value)" type="text" name="" value="">
+<h1>JSONPath AutoComplete</h1>
 
-<app-drop-down [searchText]="searchText" [dropDownObject]="suggestionArray" (dropDownEmitter)="DropDownComponentEventListener($event)">
+<div class="" style="width: 50%">
+  <app-drop-down [searchText]="searchText">
+    <input #inputBox style="width: 100%; height: 40px;" type="text" appInputFeature autofocus>
+  </app-drop-down>
+</div>
+<!--  -->
 
-</app-drop-down>
-
-<!-- <input #inputBox style="width: 50%; height: 40px;" (keyUp.dot)="subscribalService.publishValue('KEY_UP', $event.target.value)" type="text" name="" value=""> -->
+<div class="" style="width: 50%;">
+    <pre>{{jsonObject | json}}</pre>
+</div>

@@ -18,20 +18,20 @@ export class ObjectAutocompleteComponent {
   @ViewChild('inputBox') iB: ElementRef;
 
 
-  private jsonObject:any
+  public jsonObject: any
 
-  constructor(private subscribalService: SubscribalService, private CommanService:CommanService) {
+  constructor(public subscribalService: SubscribalService, private CommanService: CommanService) {
 
     this.getData();
 
     const sub = this.subscribalService.returnSubjectKey('KEY_UP').pipe(
-      debounceTime(100),
+      debounceTime(10),
       map(event => this.onKey(event))
     ).subscribe();
 
 
     this.subscribalService.returnSubjectKey('KEY_TO_APPEND').pipe(
-      debounceTime(100),
+      debounceTime(10),
       map(event => this.appendKey(event))
     ).subscribe();
   }
@@ -45,7 +45,7 @@ export class ObjectAutocompleteComponent {
   }
 
   public onKey(eventValue: any): void {
-    if (eventValue == '') { this.suggestionArray = []; this.searchText = JSON.parse(JSON.stringify('')); return; }
+    if (eventValue == '' || eventValue == undefined) { this.suggestionArray = []; this.searchText = JSON.parse(JSON.stringify('')); return; }
     let sT = '';
     let temp = eventValue.split('.');
     if (temp.length > 1) {
@@ -54,6 +54,7 @@ export class ObjectAutocompleteComponent {
         if (typeof (jp.query(this.jsonObject, eventValue)[0]) == 'string' || typeof (jp.query(this.jsonObject, eventValue)[0]) == 'number' || typeof (jp.query(this.jsonObject, eventValue)[0]) == 'boolean') {
           this.searchText = JSON.parse(JSON.stringify(sT));
           this.suggestionArray = [];
+          this.subscribalService.setSuggestedArray(this.suggestionArray);
           return;
         } else if (typeof (jp.query(this.jsonObject, eventValue)[0]) == 'object') {
           this.searchText = JSON.parse(JSON.stringify(sT));
@@ -75,9 +76,7 @@ export class ObjectAutocompleteComponent {
     // console.log('sdsds',temp.join('.'));
     try {
       if (typeof (jp.query(this.jsonObject, eventValue)[0]) == 'object') {
-        // this.searchText = JSON.parse(JSON.stringify(''));
         this.searchText = JSON.parse(JSON.stringify(sT));
-
         this.suggestionArray = Object.keys(jp.query(this.jsonObject, eventValue)[0]);
 
         if (Array.isArray(jp.query(this.jsonObject, eventValue)[0])) {
@@ -85,47 +84,51 @@ export class ObjectAutocompleteComponent {
           tempArr.unshift('*');
           this.suggestionArray = tempArr;
         }
-
       } else if (typeof (jp.query(this.jsonObject, eventValue)[0]) == 'string' || typeof (jp.query(this.jsonObject, eventValue)[0]) == 'number' || typeof (jp.query(this.jsonObject, eventValue)[0]) == 'boolean') {
-        console.log('other')
         this.searchText = JSON.parse(JSON.stringify(''));
         this.suggestionArray = [];
       } else if (typeof (jp.query(this.jsonObject, eventValue)[0]) == 'undefined') {
-        console.log('undefined')
-        // this.suggestionArray = [];
         const valArr = eventValue.split('.');
-        // this.searchText = JSON.parse(JSON.stringify(valArr[valArr.length - 1]));
         this.searchText = JSON.parse(JSON.stringify(sT));
       } else {
-        console.log('else')
         this.searchText = JSON.parse(JSON.stringify(''));
-        // this.suggestionArray = [];
       }
     } catch (err) {
-      console.log('catch')
       this.searchText = JSON.parse(JSON.stringify(''));
-      // this.suggestionArray = [];
     }
+    this.subscribalService.setSuggestedArray(this.suggestionArray);
   }
 
   public appendKey(keyName: string) {
-    let temp = this.iB.nativeElement.value.split('.');
-
-    // TO CHECK WHEATHER LAST KEY IS NOT EMPTY
-    if (temp[temp.length - 1] == '') temp[temp.length - 1] = keyName;
-    else temp.push(keyName);
+    let temp = []
+    try {
+      if (typeof (jp.query(this.jsonObject, this.iB.nativeElement.value)[0]) == 'undefined') {
+        temp = this.iB.nativeElement.value.split('.');
+        temp[temp.length - 1] = keyName;
+      } else {
+        temp = this.iB.nativeElement.value.split('.');
+        // TO CHECK WHEATHER LAST KEY IS NOT EMPTY
+        if (temp[temp.length - 1] == '') temp[temp.length - 1] = keyName;
+        else temp.push(keyName);
+      }
+    } catch (err) {
+      temp = this.iB.nativeElement.value.split('.');
+      // TO CHECK WHEATHER LAST KEY IS NOT EMPTY
+      if (temp[temp.length - 1] == '') temp[temp.length - 1] = keyName;
+      else temp.push(keyName);
+    }
 
     this.iB.nativeElement.value = temp.join(".");
 
     this.subscribalService.publishValue('KEY_UP', this.iB.nativeElement.value);
   }
 
-  // public DropDownComponentEventListener(v: string): void {
-  //   let temp = this.iB.nativeElement.value.split('.');
-  //
-  //   this.iB.nativeElement.value = temp.join(".");
-  //   this.keyUp.next(this.iB.nativeElement.value);
-  // }
+  public DropDownComponentEventListener(v: string): void {
+    // let temp = this.iB.nativeElement.value.split('.');
+    //
+    // this.iB.nativeElement.value = temp.join(".");
+    // this.keyUp.next(this.iB.nativeElement.value);
+  }
 
 
 

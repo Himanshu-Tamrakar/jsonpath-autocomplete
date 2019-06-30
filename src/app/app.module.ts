@@ -10,6 +10,9 @@ import { FilterPipe } from './core/pipes/filter.pipe';
 import { FinddotDirective } from './core/direcctives/finddot.directive';
 import { SubscribalService } from './core/services/subscribal.service';
 import { CommanService } from './core/services/comman.service';
+import { DropdownFeatureDirective } from './core/direcctives/dropdown-feature.directive';
+import { InputFeatureDirective } from './core/direcctives/input-feature.directive';
+import { HighlightDirective } from './core/direcctives/highlight.directive';
 
 @NgModule({
   declarations: [
@@ -17,7 +20,10 @@ import { CommanService } from './core/services/comman.service';
     DropDownComponent,
     ObjectAutocompleteComponent,
     FilterPipe,
-    FinddotDirective
+    FinddotDirective,
+    DropdownFeatureDirective,
+    InputFeatureDirective,
+    HighlightDirective
   ],
   imports: [
     BrowserModule,

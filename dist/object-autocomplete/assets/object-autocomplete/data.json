@@ -1,0 +1,47 @@
+{
+  "parsorObject": {
+    "product": "Live JSON generator",
+    "version": 3.1,
+    "releaseDate": "2014-06-25T00:00:00.000Z",
+    "demo": true,
+    "hiyo": {
+      "0": {
+        "himanshu": "tamrakar"
+      },
+      "1": "one"
+    },
+    "person": {
+      "id": 12345,
+      "name": "John Doe",
+      "phones": {
+        "home": "800-123-4567",
+        "mobile": "877-123-1234"
+      },
+      "email": [
+        "jd@example.com",
+        "jd@example.org"
+      ],
+      "dateOfBirth": "1980-01-02T00:00:00.000Z",
+      "registered": true,
+      "emergencyContacts": [{
+          "name": "Jane Doe",
+          "phone": "888-555-1212",
+          "relationship": "spouse"
+        },
+        {
+          "name": "Justin Doe",
+          "phone": "877-123-1212",
+          "relationship": "parent"
+        }
+      ]
+    },
+    "test": {
+      "0": "asd",
+      "1": {
+        "hilo": "World"
+      },
+      "2": "asda"
+    },
+    "test1": ["asd", "sasd", "asda"]
+  }
+}
