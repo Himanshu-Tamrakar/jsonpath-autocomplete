@@ -9,14 +9,10 @@ export class DropdownFeatureDirective {
 
   @HostListener('document: keyup', ['$event'])
   onInputChange(event: KeyboardEvent) {
-
-
-
     if (event.keyCode == 38) {
-      setTimeout(()=>{this.el.nativeElement.scrollTop = this.el.nativeElement.scrollTop - 25;}, 200)
-
+      setTimeout(()=>{this.el.nativeElement.scrollTop = this.el.nativeElement.scrollTop - 10;}, 50)
     } else if (event.keyCode == 40) {
-      setTimeout(()=>{this.el.nativeElement.scrollTop = this.el.nativeElement.scrollTop + 25;}, 200)
+      setTimeout(()=>{this.el.nativeElement.scrollTop = this.el.nativeElement.scrollTop + 10;}, 50)
     }
 
   }

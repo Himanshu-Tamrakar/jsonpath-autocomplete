@@ -20,7 +20,7 @@ export class DropDownComponent implements OnInit {
   // @Input('dropDownObject') set dropDownObject(v: object) {
   //   this.dropdownList = v;
   // }
-  @Output() dropDownEmitter = new EventEmitter<any>();
+  // @Output() dropDownEmitter = new EventEmitter<any>();
 
   constructor(public subscribalService:SubscribalService) {
     this.subscribalService.returnSubjectKey('ITEM_INDEX').subscribe((value) => {
@@ -34,9 +34,9 @@ export class DropDownComponent implements OnInit {
 
   ngOnInit() {}
 
-  emit(value:any) {
-    this.dropDownEmitter.emit(value);
-  }
+  // emit(value:any) {
+  //   this.dropDownEmitter.emit(value);
+  // }
 
   // onItemClick(value) {
   //   this.subscribalService.publishValue('KEY_TO_APPEND',value);

@@ -20,7 +20,7 @@ ul {
   position: absolute;
   z-index: 100;
   overflow: auto;
-  max-height: 200px;
+  max-height: 100px;
   width: 400px;
   max-width: 450px;
 }
@@ -36,8 +36,8 @@ ul {
 {
     position: relative;
     display: block;
-    font-size: 16px;
-    line-height: 32px;
+    font-size: 14px;
+    line-height: 20px;
     cursor: pointer;
     transition: all .3s ease-in-out;
 }

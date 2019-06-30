@@ -83,4 +83,8 @@ export class SubscribalService {
     this.publishValue('KEY_TO_APPEND', this.fiteredSuggestedArrayOption[this.sI]);
   }
 
+  public getCurrentIndex(): number {
+    return this.sI;
+  }
+
 }
