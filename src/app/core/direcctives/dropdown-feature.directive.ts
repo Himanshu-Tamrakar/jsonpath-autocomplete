@@ -7,14 +7,16 @@ export class DropdownFeatureDirective {
 
   constructor(private el: ElementRef, private render: Renderer, private subscribalService: SubscribalService) { }
 
+  @HostListener('document: click', ['$event'])
   @HostListener('document: keyup', ['$event'])
   onInputChange(event: KeyboardEvent) {
     if (event.keyCode == 38) {
       setTimeout(()=>{this.el.nativeElement.scrollTop = this.el.nativeElement.scrollTop - 10;}, 50)
     } else if (event.keyCode == 40) {
       setTimeout(()=>{this.el.nativeElement.scrollTop = this.el.nativeElement.scrollTop + 10;}, 50)
-    }
-
+    } else if(event.keyCode == 13 || event.type == 'click') {
+      setTimeout(()=>{this.el.nativeElement.scrollTop = 0; }, 50)
+    } else {}
   }
 
   // @HostListener('document:click', ['$event'])
