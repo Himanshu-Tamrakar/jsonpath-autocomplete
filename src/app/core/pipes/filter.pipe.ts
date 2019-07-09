@@ -19,7 +19,6 @@ export class FilterPipe implements PipeTransform {
     let dataA =  data.filter((it) => {
       return it.toLowerCase().includes(searchText);
     })
-    debugger
     this.subscribalService.setFiteredSuggestedArrayOption(dataA);
     return dataA;
   }

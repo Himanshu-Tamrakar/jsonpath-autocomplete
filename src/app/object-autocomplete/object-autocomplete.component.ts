@@ -14,14 +14,13 @@ export class ObjectAutocompleteComponent {
   public keyUp = new Subject<string>();
   public suggestionArray: object = [];
   public searchText: string = '';
+  public lastJsonPathCalculated: '';
 
+  public v = ""; public v1: ''; public erro;
   @ViewChild('inputBox') iB: ElementRef;
-
-
   public jsonObject: any
 
   constructor(public subscribalService: SubscribalService, private CommanService: CommanService) {
-
     this.getData();
 
     const sub = this.subscribalService.returnSubjectKey('KEY_UP').pipe(
@@ -29,13 +28,16 @@ export class ObjectAutocompleteComponent {
       map(event => this.onKey(event))
     ).subscribe();
 
-
     this.subscribalService.returnSubjectKey('KEY_TO_APPEND').pipe(
       debounceTime(10),
       map(event => this.appendKey(event))
     ).subscribe();
   }
 
+  /**
+   * [getData Gets the data from json file]
+   * @return [description]
+   */
   private getData() {
     this.CommanService.getAutoCompleteObject().subscribe((r) => {
       this.jsonObject = r['parsorObject'];
@@ -44,92 +46,136 @@ export class ObjectAutocompleteComponent {
     })
   }
 
-  public onKey(eventValue: any): void {
-    if (eventValue == '' || eventValue == undefined) { this.suggestionArray = []; this.searchText = JSON.parse(JSON.stringify('')); return; }
-    let sT = '';
-    let temp = eventValue.split('.');
-    if (temp.length > 1) {
-
-      try {
-        if (typeof (jp.query(this.jsonObject, eventValue)[0]) == 'string' || typeof (jp.query(this.jsonObject, eventValue)[0]) == 'number' || typeof (jp.query(this.jsonObject, eventValue)[0]) == 'boolean') {
-          this.searchText = JSON.parse(JSON.stringify(sT));
-          this.suggestionArray = [];
-          this.subscribalService.setSuggestedArray(this.suggestionArray);
-          return;
-        } else if (typeof (jp.query(this.jsonObject, eventValue)[0]) == 'object') {
-          this.searchText = JSON.parse(JSON.stringify(sT));
-          this.suggestionArray = Object.keys(jp.query(this.jsonObject, eventValue)[0]);
-        } else {
-          sT = temp[temp.length - 1];
-          temp.splice(-1, 1);
-          eventValue = temp.join('.')
-        }
-      } catch (err) {
-        sT = temp[temp.length - 1];
-        temp.splice(-1, 1);
-        eventValue = temp.join('.')
-      }
-
-
+  /**
+   * [onKey methed call on every key press]
+   * @param  path [description]
+   * @return      [description]
+   */
+  private onKey(path: string) {
+    if (path == '' || path == undefined) {
+      this.subscribalService.setSuggestedArray([]); this.setSeachText(this.getSearchText('', false));
     }
+    const dummyPath = path;
+    const pathBeforeLastDot = path.split('.'); pathBeforeLastDot.pop();
 
-    // console.log('sdsds',temp.join('.'));
-    try {
-      if (typeof (jp.query(this.jsonObject, eventValue)[0]) == 'object') {
-        this.searchText = JSON.parse(JSON.stringify(sT));
-        this.suggestionArray = Object.keys(jp.query(this.jsonObject, eventValue)[0]);
+    //get data till path
+    let result = this.getValueFromPath(dummyPath, this.jsonObject);
+    //get data till before last dot
+    let resultBeforeLastDot = this.getValueFromPath(pathBeforeLastDot.join('.'), this.jsonObject);
 
-        if (Array.isArray(jp.query(this.jsonObject, eventValue)[0])) {
-          let tempArr = <any[]>this.suggestionArray;
-          tempArr.unshift('*');
-          this.suggestionArray = tempArr;
-        }
-      } else if (typeof (jp.query(this.jsonObject, eventValue)[0]) == 'string' || typeof (jp.query(this.jsonObject, eventValue)[0]) == 'number' || typeof (jp.query(this.jsonObject, eventValue)[0]) == 'boolean') {
-        this.searchText = JSON.parse(JSON.stringify(''));
-        this.suggestionArray = [];
-      } else if (typeof (jp.query(this.jsonObject, eventValue)[0]) == 'undefined') {
-        const valArr = eventValue.split('.');
-        this.searchText = JSON.parse(JSON.stringify(sT));
+    //* means it is not able to retrieve data due to wrong path or something else if complete path wo
+    if (result != '*' && result.length > 0) {
+      this.setSuggestedArray(result);
+      this.setSeachText(this.getSearchText('', false));
+    } else {
+      if (resultBeforeLastDot != '*' && resultBeforeLastDot.length > 0) {
+        this.setSuggestedArray(resultBeforeLastDot);
+        this.setSeachText(this.getSearchText(path, true))
       } else {
-        this.searchText = JSON.parse(JSON.stringify(''));
+        this.subscribalService.setSuggestedArray([]); this.setSeachText(this.getSearchText('', false));
       }
-    } catch (err) {
-      this.searchText = JSON.parse(JSON.stringify(''));
     }
+  }
+
+  /**
+   * [getSearchText gives the searchable text]
+   * @param  path            [description]
+   * @param  needToCalculate [description]
+   * @return                 [description]
+   */
+  private getSearchText(path: string, needToCalculate: boolean): string {
+    if (!needToCalculate) return '';
+
+    let tA = path.split('.');
+    return tA[tA.length - 1];
+  }
+
+  /**
+   * [setSuggestedArray set the value for suggestion array, and sets its value through service]
+   * @param  jsonPathValue [description]
+   * @return               [description]
+   */
+  private setSuggestedArray(jsonPathValue) {
+    if (typeof jsonPathValue[0] == 'string' || typeof jsonPathValue[0] == 'number' || typeof jsonPathValue[0] == 'boolean' || typeof jsonPathValue[0] == null) {
+      this.suggestionArray = [];
+    } else if (typeof jsonPathValue[0] == 'object') {
+      if (Array.isArray(jsonPathValue[0]) && jsonPathValue[0].length > 0) {
+        let tempArr = <any[]>Object.keys(jsonPathValue[0]); tempArr.unshift('*');
+        this.suggestionArray = tempArr;
+      } else this.suggestionArray = Object.keys(jsonPathValue[0]);
+    }
+
     this.subscribalService.setSuggestedArray(this.suggestionArray);
   }
 
-  public appendKey(keyName: string) {
-    let temp = []
+  /**
+   * [getValueFromPath retrive the value from the path]
+   * @param  path        [description]
+   * @param  objectValue [description]
+   * @return             [description]
+   */
+  private getValueFromPath(path, objectValue): any {
     try {
-      if (typeof (jp.query(this.jsonObject, this.iB.nativeElement.value)[0]) == 'undefined') {
-        temp = this.iB.nativeElement.value.split('.');
-        temp[temp.length - 1] = keyName;
-      } else {
-        temp = this.iB.nativeElement.value.split('.');
-        // TO CHECK WHEATHER LAST KEY IS NOT EMPTY
-        if (temp[temp.length - 1] == '') temp[temp.length - 1] = keyName;
-        else temp.push(keyName);
-      }
+      return jp.query(objectValue, path);
     } catch (err) {
-      temp = this.iB.nativeElement.value.split('.');
-      // TO CHECK WHEATHER LAST KEY IS NOT EMPTY
-      if (temp[temp.length - 1] == '') temp[temp.length - 1] = keyName;
-      else temp.push(keyName);
+      return '*';
+    }
+  }
+
+  /**
+   * [setSeachText sets the searchable text for given suggestion array]
+   * @param  sT [description]
+   * @return    [description]
+   */
+  private setSeachText(sT: string): void {
+    this.searchText = JSON.parse((JSON.stringify(sT)));
+  }
+
+
+  /**
+   * [appendKey appends the key on input box and publish its value]
+   * @param  keyName [description]
+   * @return         [description]
+   */
+  private appendKey(keyName: any) {
+    debugger
+    if(keyName == undefined) return;
+    let inputValue = this.iB.nativeElement.value.trim();
+    let keyArr = inputValue.split('.');
+    //If last element is '', in case of $.state. => enter
+    if(keyArr[keyArr.length-1] == '') keyArr.pop();
+
+    let result = this.getValueFromPath(inputValue, this.jsonObject);
+
+    if(result != '*') {
+      // $.stat he is entered and press enter
+      if(result[0] == undefined) keyArr[keyArr.length-1] = keyName;
+
+      else keyArr.push(keyName);
+    } else {
+        keyArr.push(keyName);
     }
 
-    this.iB.nativeElement.value = temp.join(".");
-
+    //join all the key and publish the value
+    this.iB.nativeElement.value = keyArr.join(".");
     this.subscribalService.publishValue('KEY_UP', this.iB.nativeElement.value);
   }
 
-  public DropDownComponentEventListener(v: string): void {
-    // let temp = this.iB.nativeElement.value.split('.');
-    //
-    // this.iB.nativeElement.value = temp.join(".");
-    // this.keyUp.next(this.iB.nativeElement.value);
-  }
 
 
+  // test(v) {
+  //   try {
+  //     this.v = jp.query(this.jsonObject, v);
+  //     this.v1 = jp.query(this.jsonObject, v)[0];
+  //
+  //     console.log(typeof this.v1)
+  //
+  //     this.erro = ''
+  //   } catch (err) {
+  //     console.log(err)
+  //     this.erro = err;
+  //   }
+  //
+  // }
 
 }
