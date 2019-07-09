@@ -6,19 +6,20 @@ import { SubscribalService } from '../services/subscribal.service';
 })
 export class FilterPipe implements PipeTransform {
 
-  constructor(private subscribalService:SubscribalService) {}
+  constructor(private subscribalService: SubscribalService) { }
 
-  transform(data: any[], searchText:string): any[] {
+  transform(data: any[], searchText: string): any[] {
 
-    if(!data) return [];
-    if(!searchText) return data;
-    if(searchText == '') return data;
+    if (!data) return [];
+    if (!searchText) return data;
+    if (searchText == '') return data;
 
     searchText = searchText.toLowerCase();
 
-    let dataA =  data.filter((it) => {
+    let dataA = data.filter((it) => {
       return it.toLowerCase().includes(searchText);
-    })
+    }) || [];
+
     this.subscribalService.setFiteredSuggestedArrayOption(dataA);
     return dataA;
   }

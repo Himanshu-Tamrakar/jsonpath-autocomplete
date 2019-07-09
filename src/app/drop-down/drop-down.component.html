@@ -4,10 +4,10 @@
     {{o}}</li>
   <li (click)="onItemClick(o)" style="padding: 6px; border: 1px solid green;margin:1px; cursor:pointer;" *ngFor="let o of dropdownList | filter : sText">{{o}}</li>
 </ul> -->
-  
+
 
 <div class="autocomplete-wrapper">
-  <div class="list-group autocomplete" appDropdownFeature>
+  <div class="list-group autocomplete">
     <ul>
       <li class="list" [ngClass]="{'active': i == selectedIndex}" (click)="subscribalService.publishValue('KEY_TO_APPEND', o)" *ngFor="let o of dropdownList | filter : sText; index as i">
         {{o}}

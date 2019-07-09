@@ -20,7 +20,7 @@ ul {
   position: absolute;
   z-index: 100;
   overflow: auto;
-  max-height: 100px;
+  max-height: 250px;
   width: 400px;
   max-width: 450px;
 }

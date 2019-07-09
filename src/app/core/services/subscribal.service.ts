@@ -35,6 +35,7 @@ export class SubscribalService {
   }
 
   public publishValue(keyType, value) {
+    debugger
     switch (keyType) {
       case 'KEY_TO_APPEND': {
         this.keyToAppend.next(value);
@@ -45,21 +46,22 @@ export class SubscribalService {
         break;
       }
       case 'ITEM_INDEX': {
-        this.selectedItemIndex.next(value)
+        this.selectedItemIndex.next(value);
+        break;
       }
       case 'SUGGESTED_ARRAY': {
         this.suggestedArray.next(value);
+        break;
       }
     }
   }
 
   public selectedIndexValue(operator) {
-    if(operator == '+') this.sI++;
-    else this.sI--;
-
-    if(this.sI < 0) this.sI=0;
-    if(this.suggestedArrayOption.length-1 < this.sI) this.sI = this.suggestedArrayOption.length-1;
-
+    if(operator == '+') {
+      if(this.suggestedArrayOption.length-1 > this.sI) this.sI++;
+    } else {
+      if(this.sI > 0) this.sI--;
+    }
     this.publishValue('ITEM_INDEX', this.sI);
   }
 
@@ -68,15 +70,17 @@ export class SubscribalService {
     this.publishValue('ITEM_INDEX', this.sI);
   }
 
-  public setSuggestedArray(obj:any) {
+  public setSuggestedArray(obj:any[]) {
+    debugger
     this.suggestedArrayOption = obj;
     this.setFiteredSuggestedArrayOption(obj);
     this.resetIndex();
     this.publishValue('SUGGESTED_ARRAY', this.suggestedArrayOption);
   }
 
-  public setFiteredSuggestedArrayOption(obj) {
-    if(Array.isArray(obj)) this.fiteredSuggestedArrayOption = obj;
+  public setFiteredSuggestedArrayOption(obj:any[]) {
+      this.fiteredSuggestedArrayOption = obj;
+      this.suggestedArrayOption = obj;
   }
 
   public handleClick() {
