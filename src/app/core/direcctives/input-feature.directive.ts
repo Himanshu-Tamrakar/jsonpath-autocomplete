@@ -2,7 +2,7 @@ import { Directive, ElementRef, Renderer, HostListener, Output, EventEmitter } f
 import { SubscribalService } from '../../core/services/subscribal.service';
 
 @Directive({
-  selector: '[appInputFeature]'
+  selector: '[appInputFeature]',
 })
 export class InputFeatureDirective {
 

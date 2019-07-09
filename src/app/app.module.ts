@@ -21,8 +21,8 @@ import { HighlightDirective } from './core/direcctives/highlight.directive';
     ObjectAutocompleteComponent,
     FilterPipe,
     FinddotDirective,
-    DropdownFeatureDirective,
     InputFeatureDirective,
+    DropdownFeatureDirective,
     HighlightDirective
   ],
   imports: [

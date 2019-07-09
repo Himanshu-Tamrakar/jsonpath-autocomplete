@@ -105,7 +105,7 @@ export class ObjectAutocompleteComponent {
       } else this.suggestionArray = Object.keys(jsonPathValue[0]);
     }
 
-    this.subscribalService.setSuggestedArray(this.suggestionArray);
+    this.subscribalService.setSuggestedArray(<any[]>this.suggestionArray);
   }
 
   /**

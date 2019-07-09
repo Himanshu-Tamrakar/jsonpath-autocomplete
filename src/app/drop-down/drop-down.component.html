@@ -7,7 +7,7 @@
 
 
 <div class="autocomplete-wrapper">
-  <div class="list-group autocomplete">
+  <div class="list-group autocomplete" appDropdownFeature>
     <ul>
       <li class="list" [ngClass]="{'active': i == selectedIndex}" (click)="subscribalService.publishValue('KEY_TO_APPEND', o)" *ngFor="let o of dropdownList | filter : sText; index as i">
         {{o}}
